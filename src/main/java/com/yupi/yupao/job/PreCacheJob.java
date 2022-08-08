@@ -2,6 +2,7 @@ package com.yupi.yupao.job;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yupi.yupao.mapper.UserMapper;
 import com.yupi.yupao.model.domain.User;
 import com.yupi.yupao.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -28,6 +30,7 @@ public class PreCacheJob {
 
     @Resource
     private UserService userService;
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
