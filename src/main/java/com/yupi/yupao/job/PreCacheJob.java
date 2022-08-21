@@ -63,6 +63,7 @@ public class PreCacheJob {
         } catch (InterruptedException e) {
             log.error("doCacheRecommendUser error", e);
         } finally {
+            // 只能释放自己的锁
             if (lock.isHeldByCurrentThread()) {
                 System.out.println("unLock: " + Thread.currentThread().getId());
                 lock.unlock();
