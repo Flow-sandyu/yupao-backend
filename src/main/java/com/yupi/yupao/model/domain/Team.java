@@ -9,8 +9,6 @@ import java.util.Date;
 /**
  * 队伍实体
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @TableName(value = "team")
 @Data
@@ -62,7 +60,11 @@ public class Team implements Serializable {
     private Date createTime;
 
     /**
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> 6006ab6 (add 添加组队功能增删改查)
      */
     private Date updateTime;
 

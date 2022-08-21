@@ -9,8 +9,6 @@ import java.util.Date;
 /**
  * 用户队伍关系实体
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @TableName(value = "user_team")
 @Data
@@ -42,12 +40,19 @@ public class UserTeam implements Serializable {
     private Date createTime;
 
     /**
+<<<<<<< HEAD
      *
      */
     private Date updateTime;
 
     // [加入编程导航](https://www.code-nav.cn/) 深耕编程提升【两年半】、国内净值【最高】的编程社群、用心服务【20000+】求学者、帮你自学编程【不走弯路】
 
+=======
+     * 
+     */
+    private Date updateTime;
+
+>>>>>>> 6006ab6 (add 添加组队功能增删改查)
     /**
      * 是否删除
      */

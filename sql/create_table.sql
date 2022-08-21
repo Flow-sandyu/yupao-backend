@@ -1,8 +1,4 @@
-# 数据库初始化
-# @author <a href="https://github.com/liyupi">程序员鱼皮</a>
-# @from <a href="https://yupi.icu">编程导航知识星球</a>
-create
-database if not exists yupao;
+create database if not exists yupao;
 
 use
 yupao;
@@ -73,8 +69,6 @@ create table tag
     constraint uniIdx_tagName
         unique (tagName)
 ) comment '标签';
-
-# https://t.zsxq.com/0emozsIJh
 
 create index idx_userId
     on tag (userId);
