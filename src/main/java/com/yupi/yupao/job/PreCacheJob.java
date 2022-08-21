@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 缓存预热任务
  *
+ * @author yupi
  */
 @Component
 @Slf4j
@@ -43,6 +44,7 @@ public class PreCacheJob {
     public void doCacheRecommendUser() {
         RLock lock = redissonClient.getLock("yupao:precachejob:docache:lock ");
         try {
+            // 只有一个线程能获取到锁
             if (lock.tryLock(0, -1, TimeUnit.MILLISECONDS)) {
                 System.out.println("getLock: " + Thread.currentThread().getId());
                 for (Long userId : mainUserList) {
