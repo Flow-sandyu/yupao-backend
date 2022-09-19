@@ -3,13 +3,16 @@ package com.yupi.yupao.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import com.yupi.yupao.common.ErrorCode;
 import com.yupi.yupao.constant.UserConstant;
 import com.yupi.yupao.exception.BusinessException;
 import com.yupi.yupao.model.domain.User;
+import com.yupi.yupao.model.vo.UserVO;
 import com.yupi.yupao.service.UserService;
 import com.yupi.yupao.mapper.UserMapper;
+import com.yupi.yupao.utils.AlgorithmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,13 +21,11 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.yupi.yupao.constant.UserConstant.USER_LOGIN_STATE;
 
@@ -143,7 +144,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @return
      */
     @Override
-    public User getSafetyUser(User originUser)  {
+    public User getSafetyUser(User originUser) {
         if (originUser == null) {
             return null;
         }
@@ -165,6 +166,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 用户注销
+     *
      * @param request
      */
     @Override
@@ -192,7 +194,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 2. 在内存中判断是否包含要求的标签
         return userList.stream().filter(user -> {
             String tagsStr = user.getTags();
-            Set<String> tempTagNameSet = gson.fromJson(tagsStr, new TypeToken<Set<String>>(){}.getType());
+            Set<String> tempTagNameSet = gson.fromJson(tagsStr, new TypeToken<Set<String>>() {
+            }.getType());
             tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
             for (String tagName : tagNameList) {
                 if (!tempTagNameSet.contains(tagName)) {
@@ -257,6 +260,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public boolean isAdmin(User loginUser) {
         return loginUser != null && loginUser.getUserRole() == UserConstant.ADMIN_ROLE;
+    }
+
+    @Override
+    public List<User> matchUsers(long num, User loginUser) {
+        List<User> userList = this.list();
+        String tags = loginUser.getTags();
+        Gson gson = new Gson();
+        List<String> tagList = gson.fromJson(tags, new TypeToken<List<String>>() {
+        }.getType());
+        // 用户列表的下表 => 相似度
+        SortedMap<Integer, Long> indexDistanceMap = new TreeMap<>();
+        for (int i = 0; i < userList.size(); i++) {
+            User user = userList.get(i);
+            String userTags = user.getTags();
+            // 无标签
+            if (StringUtils.isBlank(userTags)) {
+                continue;
+            }
+            List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {
+            }.getType());
+            // 计算分数
+            long distance = AlgorithmUtils.minDistance(tagList, userTagList);
+            indexDistanceMap.put(i, distance);
+        }
+        List<User> userVOList = new ArrayList<>();
+        int i = 0;
+        for (Map.Entry<Integer, Long> entry : indexDistanceMap.entrySet()) {
+            if (i > num) {
+                break;
+            }
+            User user = userList.get(entry.getKey());
+            System.out.println(user.getId() + ":" + entry.getKey() + ":" + entry.getValue());
+            userVOList.add(user);
+            i++;
+        }
+        return userVOList;
     }
 
     /**
