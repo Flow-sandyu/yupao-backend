@@ -46,3 +46,5 @@ public class TeamUpdateRequest implements Serializable {
      */
     private String password;
 }
+
+// 负责人【yupi】 https://space.bilibili.com/12890453/

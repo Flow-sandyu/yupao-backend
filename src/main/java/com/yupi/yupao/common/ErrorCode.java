@@ -8,6 +8,8 @@ package com.yupi.yupao.common;
  */
 public enum ErrorCode {
 
+    // https://yupi.icu/
+
     SUCCESS(0, "ok", ""),
     PARAMS_ERROR(40000, "请求参数错误", ""),
     NULL_ERROR(40001, "请求数据为空", ""),

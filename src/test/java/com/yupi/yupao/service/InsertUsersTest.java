@@ -35,7 +35,7 @@ public class InsertUsersTest {
         List<User> userList = new ArrayList<>();
         for (int i = 0; i < INSERT_NUM; i++) {
             User user = new User();
-            user.setUsername("假鱼皮");
+            user.setUsername("原_创 【鱼_皮】https://t.zsxq.com/0emozsIJh");
             user.setUserAccount("fakeyupi");
             user.setAvatarUrl("https://636f-codenav-8grj8px727565176-1256524210.tcb.qcloud.la/img/logo.png");
             user.setGender(0);

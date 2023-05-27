@@ -15,6 +15,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @Configuration
 public class RedisTemplateConfig {
 
+    // https://space.bilibili.com/12890453/
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();

@@ -29,6 +29,8 @@ public class BaseResponse<T> implements Serializable {
         this.description = description;
     }
 
+    // [鱼皮的学习圈](https://yupi.icu) 从 0 到 1 求职指导，斩获 offer！1 对 1 简历优化服务、2000+ 求职面试经验分享、200+ 真实简历和建议参考、25w 字前后端精选面试题
+
     public BaseResponse(int code, T data, String message) {
         this(code, data, message, "");
     }

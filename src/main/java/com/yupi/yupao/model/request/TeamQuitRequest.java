@@ -13,6 +13,8 @@ import java.io.Serializable;
 @Data
 public class TeamQuitRequest implements Serializable {
 
+    // 开发者 [coder_yupi](https://space.bilibili.com/12890453/)
+
     private static final long serialVersionUID = 3191241716373120793L;
 
     /**
