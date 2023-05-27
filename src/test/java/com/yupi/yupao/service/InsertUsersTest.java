@@ -10,6 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
+/**
+ * 导入用户测试
+ *
+ * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ */
 @SpringBootTest
 public class InsertUsersTest {
 
@@ -61,7 +67,7 @@ public class InsertUsersTest {
         List<CompletableFuture<Void>> futureList = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             List<User> userList = new ArrayList<>();
-            while(true) {
+            while (true) {
                 j++;
                 User user = new User();
                 user.setUsername("假鱼皮");
@@ -82,7 +88,7 @@ public class InsertUsersTest {
             }
             // 异步执行
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                System.out.println("threadName: " +Thread.currentThread().getName());
+                System.out.println("threadName: " + Thread.currentThread().getName());
                 userService.saveBatch(userList, batchSize);
             }, executorService);
             futureList.add(future);

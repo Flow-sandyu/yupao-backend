@@ -1,15 +1,11 @@
 package com.yupi.yupao.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yupi.yupao.model.domain.User;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RList;
 import org.redisson.api.RLock;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.ValueOperations;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -18,6 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Redisson 测试
+ *
+ * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ */
 @SpringBootTest
 public class RedissonTest {
 

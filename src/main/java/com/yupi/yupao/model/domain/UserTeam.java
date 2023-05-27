@@ -7,10 +7,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户队伍关系
- * @TableName user_team
+ * 用户队伍关系实体
+ *
+ * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
-@TableName(value ="user_team")
+@TableName(value = "user_team")
 @Data
 public class UserTeam implements Serializable {
     /**
@@ -40,7 +42,7 @@ public class UserTeam implements Serializable {
     private Date createTime;
 
     /**
-     * 
+     *
      */
     private Date updateTime;
 

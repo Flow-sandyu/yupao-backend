@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * 导入 Excel
  *
- * @author yupi
+ * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 public class ImportExcel {
 
@@ -15,8 +16,7 @@ public class ImportExcel {
      * 读取数据
      */
     public static void main(String[] args) {
-        // 写法1：JDK8+
-        // since: 3.0.0-beta1
+        // todo 记得改为自己的测试文件
         String fileName = "E:\\星球项目\\yupao-backend\\src\\main\\resources\\testExcel.xlsx";
 //        readByListener(fileName);
         synchronousRead(fileName);
@@ -24,6 +24,7 @@ public class ImportExcel {
 
     /**
      * 监听器读取
+     *
      * @param fileName
      */
     public static void readByListener(String fileName) {
@@ -32,6 +33,7 @@ public class ImportExcel {
 
     /**
      * 同步读
+     *
      * @param fileName
      */
     public static void synchronousRead(String fileName) {

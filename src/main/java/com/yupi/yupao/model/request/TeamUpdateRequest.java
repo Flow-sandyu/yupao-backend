@@ -6,9 +6,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户登录请求体
+ * 队伍更新请求体
  *
- * @author yupi
+ * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @from <a href="https://yupi.icu">编程导航知识星球</a>
  */
 @Data
 public class TeamUpdateRequest implements Serializable {
