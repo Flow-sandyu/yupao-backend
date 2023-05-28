@@ -225,11 +225,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public User getLoginUser(HttpServletRequest request) {
         if (request == null) {
-            return null;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (userObj == null) {
-            throw new BusinessException(ErrorCode.NO_AUTH);
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         return (User) userObj;
     }
@@ -252,7 +252,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * 是否为管理员
      *
      * @param loginUser
-     * @return
+     * @return 
      */
     @Override
     public boolean isAdmin(User loginUser) {
