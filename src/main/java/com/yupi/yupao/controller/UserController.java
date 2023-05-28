@@ -101,6 +101,13 @@ public class UserController {
         return ResultUtils.success(list);
     }
 
+    /**
+     * 推荐页面
+     * @param request
+     * @return
+     */
+
+
     @GetMapping("/search/tags")
     public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
@@ -110,6 +117,13 @@ public class UserController {
         return ResultUtils.success(userList);
     }
 
+    // @GetMapping("/recommend")
+    // public BaseResponse<List<User>> recommendUsers(HttpServletRequest request){
+    //     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+    //     List<User> userList = userService.list(queryWrapper);
+    //     List<User> list = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
+    //     return ResultUtils.success(list);
+    // }
     @GetMapping("/recommend")
     public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
