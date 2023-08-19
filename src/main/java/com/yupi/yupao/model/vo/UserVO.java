@@ -1,5 +1,8 @@
 package com.yupi.yupao.model.vo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,6 +19,7 @@ public class UserVO implements Serializable {
     /**
      * id
      */
+    @TableId(type = IdType.AUTO)
     private long id;
 
     /**
@@ -78,5 +82,6 @@ public class UserVO implements Serializable {
      */
     private String planetCode;
 
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

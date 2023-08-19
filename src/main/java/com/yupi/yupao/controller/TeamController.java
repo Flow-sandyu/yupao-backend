@@ -20,6 +20,7 @@ import com.yupi.yupao.service.TeamService;
 import com.yupi.yupao.service.UserService;
 import com.yupi.yupao.service.UserTeamService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,8 @@ import java.util.List;
 
 /**
  * 队伍接口
+ *
+ * @author yupi
  */
 @RestController
 @RequestMapping("/team")
@@ -42,9 +45,6 @@ public class TeamController {
 
     @Resource
     private TeamService teamService;
-
-    @Resource
-    private UserTeamService userTeamService;
 
     @PostMapping("/add")
     public BaseResponse<Long> addTeam(@RequestBody TeamAddRequest teamAddRequest, HttpServletRequest request) {
@@ -72,12 +72,11 @@ public class TeamController {
     // }
     //
     @PostMapping("/update")
-    public BaseResponse<Boolean> updateTeam(@RequestBody TeamUpdateRequest teamUpdateRequest, HttpServletRequest request) {
-        if (teamUpdateRequest == null) {
+    public BaseResponse<Boolean> updateTeam(@RequestBody Team team) {
+        if (team == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User loginUser = userService.getLoginUser(request);
-        boolean result = teamService.updateTeam(teamUpdateRequest, loginUser);
+        boolean result = teamService.updateById(team);
         if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败");
         }
@@ -139,7 +138,6 @@ public class TeamController {
     //     return ResultUtils.success(teamList);
     // }
 
-    // todo 查询分页
     @GetMapping("/list/page")
     public BaseResponse<Page<Team>> listTeamsByPage(TeamQuery teamQuery) {
         if (teamQuery == null) {
