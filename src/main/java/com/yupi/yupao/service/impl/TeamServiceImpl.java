@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yupi.yupao.common.ErrorCode;
+import com.yupi.yupao.constant.UserConstant;
 import com.yupi.yupao.exception.BusinessException;
 import com.yupi.yupao.model.domain.User;
 import com.yupi.yupao.model.domain.UserTeam;
 import com.yupi.yupao.model.dto.TeamQuery;
 import com.yupi.yupao.model.enums.TeamStatusEnum;
+import com.yupi.yupao.model.request.TeamJoinRequest;
+import com.yupi.yupao.model.request.TeamUpdateRequest;
 import com.yupi.yupao.model.vo.TeamUserVO;
 import com.yupi.yupao.model.vo.UserVO;
 import com.yupi.yupao.service.TeamService;
@@ -187,6 +190,119 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         return teamUserVOList;
     }
+
+
+    @Override
+    public boolean joinTeam(TeamJoinRequest teamJoinRequest, User loginUser) {
+        // 1. 请求参数是否为空？
+        if (teamJoinRequest == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        Long teamId = teamJoinRequest.getTeamId();
+        Team team = this.getTeamById(teamId);
+        Date expireTime = team.getExpireTime();
+        // 只能加入未过期的队伍
+        if (expireTime != null && expireTime.before(new Date())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "队伍已过期");
+        }
+        // 禁止加入私有的队伍
+        Integer teamStatus = team.getStatus();
+        TeamStatusEnum teamStatusEnum = TeamStatusEnum.getEnumByValue(teamStatus);
+        if (TeamStatusEnum.PRIVATE.equals(teamStatusEnum)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "禁止加入私有的队伍");
+        }
+        // 如果加入的队伍是加密的，必须密码匹配才可以
+        if (TeamStatusEnum.SECRET.equals(teamStatusEnum)) {
+            String password = teamJoinRequest.getPassword();
+            if (StringUtils.isBlank(password) || !password.equals(team.getPassword())) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
+            }
+        }
+        // 只能加入未满的队伍
+        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teamId", teamId);
+        long hasJoinedNums = userTeamService.count(queryWrapper);
+        if (hasJoinedNums >= team.getMaxNum()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "队伍已满");
+        }
+        // 用户最多加入 5 个队伍
+        long userId = loginUser.getId();
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userId);
+        long hasJoined = userTeamService.count(queryWrapper);
+        if (hasJoined >= 5) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户最多加入 5 个队伍");
+        }
+        // 不能重复加入已加入的队伍
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("teamId", teamId);
+        queryWrapper.eq("userId", userId);
+        long hasUserJoined = userTeamService.count(queryWrapper);
+        if (hasUserJoined >= 1) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不能重复加入已加入的队伍");
+        }
+        // 新增队伍 - 用户关联信息
+        UserTeam userTeam = new UserTeam();
+        userTeam.setUserId(userId);
+        userTeam.setTeamId(teamId);
+        userTeam.setJoinTime(new Date());
+        boolean result = userTeamService.save(userTeam);
+        if (!result) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "数据插入失败");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean updateTeam(TeamUpdateRequest teamUpdateRequest, User loginUser) {
+        // 1. 判断请求参数是否为空
+        if (teamUpdateRequest == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        // 2. 查询队伍是否存在
+        Long teamId = teamUpdateRequest.getId();
+        Team team = getTeamById(teamId);
+        // 3. 只有管理员或者队伍的创建者可以修改
+        Long teamUserId = team.getUserId();
+        if (!userService.isAdmin(loginUser) && teamUserId != loginUser.getId()) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
+        // 4. 如果用户传入的新值和老值一致，就不用 update 了（可自行实现，降低数据库使用次数）
+        // todo 这个还是得把用户闯进来的新职 和 查出来的team里面的各个属性去做比较
+        // 5. **如果队伍状态改为加密，必须要有密码**
+        TeamStatusEnum teamStatusEnum = TeamStatusEnum.getEnumByValue(teamUpdateRequest.getStatus());
+        String password = teamUpdateRequest.getPassword();
+        if (TeamStatusEnum.SECRET.equals(teamStatusEnum)) {
+            if (StringUtils.isBlank(password)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "必须要有密码");
+            }
+        }
+        Team updateTeam = new Team();
+        BeanUtils.copyProperties(teamUpdateRequest, updateTeam);
+        boolean result = this.updateById(updateTeam);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败");
+        }
+        return true;
+    }
+
+    /**
+     * 根据 id 获取队伍信息
+     *
+     * @param teamId
+     * @return
+     */
+    private Team getTeamById(Long teamId) {
+        if (teamId == null || teamId < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Team team = this.getById(teamId);
+        if (team == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "队伍不存在");
+        }
+        return team;
+    }
+
 }
 
 
