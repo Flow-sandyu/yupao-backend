@@ -62,7 +62,6 @@ public interface TeamService extends IService<Team> {
      */
     boolean quitTeam(TeamQuitRequest teamQuitRequest, User loginUser);
 
-
     /**
      * 删除（解散）队伍
      *
@@ -73,4 +72,3 @@ public interface TeamService extends IService<Team> {
     boolean deleteTeam(long id, User loginUser);
 
 }
-

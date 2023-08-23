@@ -59,11 +59,12 @@ public class TeamController {
     }
 
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody long id) {
+    public BaseResponse<Boolean> deleteTeam(@RequestBody long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        boolean result = teamService.removeById(id);
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.deleteTeam(id,loginUser);
         if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败");
         }
@@ -80,6 +81,16 @@ public class TeamController {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败");
         }
         return ResultUtils.success(true);
+    }
+
+    @PostMapping("/quit")
+    public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitRequest TeamQuitRequest, HttpServletRequest request) {
+        if (TeamQuitRequest == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.quitTeam(TeamQuitRequest, loginUser);
+        return ResultUtils.success(result);
     }
 
     @GetMapping("/get")
