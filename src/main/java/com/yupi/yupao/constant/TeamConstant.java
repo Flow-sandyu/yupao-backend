@@ -3,7 +3,7 @@ package com.yupi.yupao.constant;
 /**
  * 队伍常量
  *
- * @author yupi
+ * @author flowsand
  */
 public interface TeamConstant {
 

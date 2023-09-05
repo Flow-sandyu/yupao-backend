@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 /**
  * 队伍接口
  *
- * @author yupi
+ * @author flowsand
  */
 @RestController
 @RequestMapping("/team")
@@ -94,6 +94,9 @@ public class TeamController {
         }
         User loginUser = userService.getLoginUser(request);
         boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "加入队伍失败");
+        }
         return ResultUtils.success(result);
     }
 

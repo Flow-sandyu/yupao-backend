@@ -3,7 +3,7 @@ package com.yupi.yupao.common;
 /**
  * 返回工具类
  *
- * @author yupi
+ * @author flowsand
  */
 public class ResultUtils {
 

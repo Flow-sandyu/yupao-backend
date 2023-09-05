@@ -28,7 +28,7 @@ import static com.yupi.yupao.constant.UserConstant.USER_LOGIN_STATE;
 /**
  * 用户接口
  *
- * @author yupi
+ * @author flowsand
  */
 @RestController
 @RequestMapping("/user")

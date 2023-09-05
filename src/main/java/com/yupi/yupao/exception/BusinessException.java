@@ -5,7 +5,7 @@ import com.yupi.yupao.common.ErrorCode;
 /**
  * 自定义异常类
  *
- * @author yupi
+ * @author flowsand
  */
 public class BusinessException extends RuntimeException {
 

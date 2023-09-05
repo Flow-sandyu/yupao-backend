@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 用户登录请求体
  *
- * @author yupi
+ * @author flowsand
  */
 @Data
 public class TeamAddRequest implements Serializable {

@@ -30,7 +30,7 @@ import static com.yupi.yupao.constant.UserConstant.USER_LOGIN_STATE;
 /**
  * 用户服务实现类
  *
- * @author yupi
+ * @author flowsand
  */
 @Service
 @Slf4j

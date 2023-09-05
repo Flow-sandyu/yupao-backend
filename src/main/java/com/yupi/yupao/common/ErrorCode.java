@@ -3,7 +3,7 @@ package com.yupi.yupao.common;
 /**
  * 错误码
  *
- * @author yupi
+ * @author flowsand
  */
 public enum ErrorCode {
 
