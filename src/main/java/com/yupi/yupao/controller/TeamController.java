@@ -88,6 +88,18 @@ public class TeamController {
         return ResultUtils.success(result);
     }
 
+    @PostMapping("/join")
+    public BaseResponse<Boolean> joinTeam(@RequestBody TeamJoinRequest teamJoinRequest, HttpServletRequest request) {
+        if (teamJoinRequest == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "加入队伍失败");
+        }
+        return ResultUtils.success(result);
+    }
 
     @PostMapping("/quit")
     public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitRequest TeamQuitRequest, HttpServletRequest request) {
@@ -114,7 +126,7 @@ public class TeamController {
     @GetMapping("/list")
     public BaseResponse<List<TeamUserVO>> listTeams(TeamQuery teamQuery, HttpServletRequest request) {
         if (teamQuery == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         boolean isAdmin = userService.isAdmin(request);
         // 1、查询队伍列表
@@ -159,35 +171,10 @@ public class TeamController {
         return ResultUtils.success(resultPage);
     }
 
-    @PostMapping("/join")
-    public BaseResponse<Boolean> joinTeam(@RequestBody TeamJoinRequest teamJoinRequest, HttpServletRequest request) {
-        if (teamJoinRequest == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        User loginUser = userService.getLoginUser(request);
-        boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
-        return ResultUtils.success(result);
-    }
-
-
-    @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request) {
-        if (deleteRequest == null || deleteRequest.getId() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        long id = deleteRequest.getId();
-        User loginUser = userService.getLoginUser(request);
-        boolean result = teamService.deleteTeam(id, loginUser);
-        if (!result) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败");
-        }
-        return ResultUtils.success(true);
-    }
-
-
     /**
      * 获取我创建的队伍
-       * @param teamQuery
+     *
+     * @param teamQuery
      * @param request
      * @return
      */
@@ -202,10 +189,10 @@ public class TeamController {
         return ResultUtils.success(teamList);
     }
 
-
     /**
      * 获取我加入的队伍
-       * @param teamQuery
+     *
+     * @param teamQuery
      * @param request
      * @return
      */
@@ -234,30 +221,3 @@ public class TeamController {
         return ResultUtils.success(teamList);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

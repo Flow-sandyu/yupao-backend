@@ -31,12 +31,13 @@ import static com.yupi.yupao.constant.UserConstant.USER_LOGIN_STATE;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = { "http://localhost:3000" })
+@CrossOrigin(origins = {"http://localhost:3000"})
 @Slf4j
 public class UserController {
 
     @Resource
     private UserService userService;
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -96,7 +97,7 @@ public class UserController {
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request) {
         if (!userService.isAdmin(request)) {
-           throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(username)) {
@@ -112,8 +113,6 @@ public class UserController {
      * @param tagNameList
      * @return BaseResponse<List<User>>
      */
-
-
     @GetMapping("/search/tags")
     public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
@@ -132,21 +131,17 @@ public class UserController {
     // }
     @GetMapping("/recommend")
     public BaseResponse<Page<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
-        // 用用户信息做 key
         User loginUser = userService.getLoginUser(request);
         String redisKey = String.format("yupao:user:recommend:%s", loginUser.getId());
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-
         // 如果有缓存，直接读缓存
         Page<User> userPage = (Page<User>) valueOperations.get(redisKey);
         if (userPage != null) {
             return ResultUtils.success(userPage);
         }
-
         // 无缓存，查数据库
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         userPage = userService.page(new Page<>(pageNum, pageSize), queryWrapper);
-
         // 写缓存
         try {
             valueOperations.set(redisKey, userPage, 30000, TimeUnit.MILLISECONDS);

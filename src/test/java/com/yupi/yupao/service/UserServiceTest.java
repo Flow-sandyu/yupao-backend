@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * 用户服务测试
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author yupi
  */
 @SpringBootTest
 public class UserServiceTest {
@@ -25,7 +24,7 @@ public class UserServiceTest {
     @Test
     public void testAddUser() {
         User user = new User();
-        user.setUsername("本项目_所属 [程序员鱼皮](https://t.zsxq.com/0emozsIJh)\n");
+        user.setUsername("dogYupi");
         user.setUserAccount("123");
         user.setAvatarUrl("https://636f-codenav-8grj8px727565176-1256524210.tcb.qcloud.la/img/logo.png");
         user.setGender(0);

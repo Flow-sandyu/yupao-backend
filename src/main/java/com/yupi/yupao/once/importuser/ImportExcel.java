@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * 导入 Excel
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author yupi
  */
 public class ImportExcel {
 
@@ -31,11 +30,8 @@ public class ImportExcel {
         EasyExcel.read(fileName, XingQiuTableUserInfo.class, new TableListener()).sheet().doRead();
     }
 
-    // [加入我们](https://yupi.icu) 从 0 到 1 项目实战，经验拉满！10+ 原创项目手把手教程、7 日项目提升训练营、1000+ 项目经验笔记、60+ 编程经验分享直播
-
     /**
      * 同步读
-     *
      * @param fileName
      */
     public static void synchronousRead(String fileName) {

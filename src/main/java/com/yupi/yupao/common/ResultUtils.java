@@ -3,8 +3,7 @@ package com.yupi.yupao.common;
 /**
  * 返回工具类
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * @author yupi
  */
 public class ResultUtils {
 
@@ -28,8 +27,6 @@ public class ResultUtils {
     public static BaseResponse error(ErrorCode errorCode) {
         return new BaseResponse<>(errorCode);
     }
-
-    // 作者 [程序员鱼皮](https://yupi.icu/)
 
     /**
      * 失败

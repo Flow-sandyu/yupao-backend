@@ -1,9 +1,7 @@
 package com.yupi.yupao.service;
 
-import com.yupi.yupao.common.BaseResponse;
 import com.yupi.yupao.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.yupi.yupao.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -11,6 +9,7 @@ import java.util.List;
 /**
  * 用户服务
  *
+ * @author yupi
  */
 public interface UserService extends IService<User> {
 
@@ -90,9 +89,10 @@ public interface UserService extends IService<User> {
 
     /**
      * 匹配用户
+     *
      * @param num
-     * @param loginUser
+     * @param user
      * @return
      */
-    List<User> matchUsers(long num, User loginUser);
+    List<User> matchUsers(long num, User user);
 }
